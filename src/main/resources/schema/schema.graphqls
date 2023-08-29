@@ -1,8 +1,12 @@
 type Query {
-    shows(titleFilter: String): [Show]
+    users(id: Int) : [User]
 }
 
-type Show {
-    title: String
-    releaseYear: Int
+type User {
+    id: Int!
+    userName: String
+    emailId: String
+    firstName: String
+    lastName: String
+    age: Int
 }
