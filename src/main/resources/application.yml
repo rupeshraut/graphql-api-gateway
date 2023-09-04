@@ -21,3 +21,4 @@ api:
     base-url: http://localhost:8080
     user-find-all-uri: /user-service/user
     user-find-by-id-uri: /user-service/user/{id}
+    user-role-find-by-user-id-uri: /user-role-service/user/role/user/{id}

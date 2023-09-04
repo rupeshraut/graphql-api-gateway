@@ -9,4 +9,11 @@ type User {
     firstName: String
     lastName: String
     age: Int
+    role: UserRole
+}
+
+type UserRole {
+    id: Int!
+    userId: Int!
+    role: String
 }

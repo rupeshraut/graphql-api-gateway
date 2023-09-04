@@ -1,13 +1,12 @@
 package com.ethdc.poc.gag.df;
 
-import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsQuery;
-import com.netflix.graphql.dgs.InputArgument;
+import com.netflix.graphql.dgs.*;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 
 /**
@@ -23,6 +22,8 @@ public class UserDataFetcher {
     private String userServiceFindAllUri;
     @Value("${api.gateway.user-find-by-id-uri}")
     private String userServiceFindByIdUri;
+    @Value("${api.gateway.user-role-find-by-user-id-uri}")
+    private String userRoleServiceFindByUserIdUri;
     private WebClient webClient;
 
 
@@ -54,6 +55,17 @@ public class UserDataFetcher {
                 .retrieve()
                 .bodyToFlux(User.class)
                 .onErrorResume(Flux::error);
+    }
+
+    @DgsData(parentType = "User")
+    public Mono<UserRole> role(DgsDataFetchingEnvironment dfe) {
+       var user = dfe.<User>getSource();
+        return this.webClient.get()
+                .uri(ub -> ub.path(userRoleServiceFindByUserIdUri).build(user.id()))
+                .retrieve()
+                .bodyToMono(UserRole.class)
+                .onErrorResume(Mono::error);
+
     }
 
 }
